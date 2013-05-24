@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style>
+	.completed {
+		color :red;
+		font-style: italic;
+		text-decoration: line-through;
+	}
+	</style>
+	<script>
+	(function(){
+		function alertTask(){
+			var txtTask = document.getElementById("txtTask");
+			var taskName = txtTask.value;
+			var newTaskItem = document.createElement("li");
+			newTaskItem.addEventListener("click",onTaskItemClick);
+			newTaskItem.innerText = taskName;
+			var taskList = document.getElementById("ulTaskList");
+			taskList.appendChild(newTaskItem);
+		}
+		function initialize(){
+			document.getElementById("btnAddTask").addEventListener('click',alertTask);
+			document.getElementById("btnRemoveCompletedTasks").addEventListener('click',removeCompletedTasks);
+			var allTaskItems = document.querySelectorAll("#ulTaskList > li");
+			for(var i=0;i<allTaskItems.length;i++){
+				allTaskItems[i].addEventListener("click",onTaskItemClick);
+			}
+		}
+		function onTaskItemClick(){
+			if (this.classList.contains("completed")){
+				this.classList.remove("completed");
+			} else {
+				this.classList.add("completed");
+			}
+		}
+
+		function removeCompletedTasks(){
+			var taskList = document.getElementById("ulTaskList");
+			var allTaskItems = document.querySelectorAll("#ulTaskList > li");
+			for(var i=allTaskItems.length-1;i>=0;i--){
+				var taskItem = allTaskItems[i];
+				if (taskItem.classList.contains("completed")){
+					taskList.removeChild(taskItem);
+				}
+			}
+		}
+		document.addEventListener("DOMContentLoaded",initialize);
+	})();
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<span>Task :</span>
+	<input type="text" name="" id="txtTask">
+	<input type="button" style="border:" value="Add Task" id="btnAddTask" >
+	<input type="button" value="Remove Completed" id="btnRemoveCompletedTasks">
+	<ul id="ulTaskList">
+		<li>Test Task</li>
+		<li>Test Task</li>
+		<li>Test Task</li>
+	</ul>
+	<div id="divMessage"></div>
+	
+</body>
+</html>
