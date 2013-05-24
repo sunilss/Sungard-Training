@@ -8,7 +8,7 @@
 			margin :0;
 			padding: 0;
 		}
-		.container{
+		#container{
 			margin : 10px;
 			padding : 10px;
 		}
@@ -26,48 +26,23 @@
 		<div><span id="spanResult"></span></div>
 	</script>
 	<script src="SalaryCalculatorModel.js"></script>
+	<script src="SalaryCalculatorView.js"></script>
 	<script>
 	
 	(function(){
-		var calculator = new SalaryCalculator();
-		
+		window.calculator = new SalaryCalculator();
 
 		window.addEventListener("DOMContentLoaded",function(){
-			document.getElementById("btnCalculate").addEventListener("click",calculateSalary);
-			document.getElementById("txtBasic").addEventListener('change',function(){
-				calculator.basic(parseFloat(this.value));
-			});
-			document.getElementById("txtHra").addEventListener('change',function(){
-				calculator.hra(parseFloat(this.value));
-			});
-			document.getElementById("txtDa").addEventListener('change',function(){
-				calculator.da(parseFloat(this.value));
-			});
-			document.getElementById("txtTax").addEventListener('change',function(){
-				calculator.tax(parseFloat(this.value));
-			});
-
-			calculator.addOnModelChanged('salary',refreshSalary);
-			calculator.addOnModelChanged('salary',function(){
-				document.getElementById("divSalary").innerHTML = calculator.salary();
-			});
-			calculator.addOnModelChanged('basic',function(){
-				console.log(calculator.basic());
-			})
+			window.calculatorView = new SalaryCalculatorView(window.calculator,"calculatorTemplate");
+			window.calculatorView.initialize();
+			document.getElementById("container").appendChild(window.calculatorView.root);
 		});
-		function calculateSalary(){
-			
-			calculator.calculate();
-			
-		}
-		function refreshSalary(){
-			document.getElementById("spanResult").innerHTML = calculator.salary();
-		}
+		
 	})();
 	</script>
 </head>
 <body>
-	<div class="container">
+	<div id="container">
 		
 		
 	</div>

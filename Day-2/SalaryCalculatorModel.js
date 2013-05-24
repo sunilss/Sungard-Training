@@ -1,9 +1,9 @@
 function SalaryCalculator(){
-	var _basic, 
-		_hra, 
-		_da, 
-		_tax,
-		_salary,
+	var _basic=0, 
+		_hra=0, 
+		_da=0, 
+		_tax=0,
+		_salary=0,
 		_callbacks = {};
 
 	this.basic = function(){
