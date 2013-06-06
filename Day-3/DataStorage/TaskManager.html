@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style>
+	.completed {
+		color :red;
+		font-style: italic;
+		text-decoration: line-through;
+	}
+	</style>
+	<script>
+	function TaskStorage(){
+		var storage = window.localStorage;
+		window.addEventListener("storage",function(evt){
+			console.log(evt);
+		});
+		function addTaskToStorage(taskName){
+			var taskId = new Date().getTime().toString();
+			var newTask = {
+				taskId : taskId,
+				taskName : taskName,
+				isCompleted : false
+			};
+			storage.setItem(taskId,window.JSON.stringify(newTask));
+			return newTask;
+		}
+		function removeTaskFromStorage(taskId){
+			storage.removeItem(taskId);
+		}
+		function getAllTasksFromStorage(){
+			var tasks = [];
+			for(var i=0;i<storage.length;i++){
+				var taskId = storage.key(i);
+				var taskAsString = storage.getItem(taskId);
+				var task = window.JSON.parse(taskAsString);
+				tasks.push(task);
+			}
+			return tasks;
+		}
+		function toggleCompletion(taskId){
+			var task = window.JSON.parse(storage.getItem(taskId));
+			task.isCompleted = !task.isCompleted;
+			storage.setItem(taskId,window.JSON.stringify(task));
+		}
+		return {
+			addTask : addTaskToStorage,
+			removeTask : removeTaskFromStorage,
+			getAll : getAllTasksFromStorage,
+			toggleCompletion : toggleCompletion
+		};
+
+	}
+	(function(){
+		var storage = new TaskStorage();
+		function addTask(){
+			var txtTask = document.getElementById("txtTask");
+			var taskName = txtTask.value;
+			var newTask = storage.addTask(taskName);
+			addTaskToUi(newTask);
+	
+		}
+
+		function addTaskToUi(task){
+			var newTaskItem = document.createElement("li");
+			newTaskItem.addEventListener("click",onTaskItemClick);
+			newTaskItem.setAttribute("data-task-id",task.taskId);
+			newTaskItem.innerText = task.taskName;
+			if (task.isCompleted){
+				newTaskItem.classList.add("completed");
+			}
+			var taskList = document.getElementById("ulTaskList");
+			taskList.appendChild(newTaskItem);
+		}
+
+		function addTaskToStorage(taskName){
+			var taskId = new Date().getTime().toString();
+			storage.setItem(taskId,taskName);
+			return taskId;
+		}
+		function initialize(){
+			document.getElementById("btnAddTask").addEventListener('click',addTask);
+			document.getElementById("btnRemoveCompletedTasks").addEventListener('click',removeCompletedTasks);
+			//load initial tasks from storage
+			var tasks = storage.getAll();
+			for(var i =0;i<tasks.length;i++){
+				var task= tasks[i];
+				addTaskToUi(task);
+			}
+			
+		}
+		function onTaskItemClick(){
+			if (this.classList.contains("completed")){
+				this.classList.remove("completed");
+			} else {
+				this.classList.add("completed");
+			}
+			storage.toggleCompletion(this.getAttribute("data-task-id"));
+		}
+
+		
+
+		function removeCompletedTasks(){
+			var taskList = document.getElementById("ulTaskList");
+			var allTaskItems = document.querySelectorAll("#ulTaskList > li");
+			for(var i=allTaskItems.length-1;i>=0;i--){
+				var taskItem = allTaskItems[i];
+				if (taskItem.classList.contains("completed")){
+					storage.removeTask(taskItem.getAttribute("data-task-id"));
+					taskList.removeChild(taskItem);
+				}
+			}
+		}
+		document.addEventListener("DOMContentLoaded",initialize);
+	})();
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<span>Task :</span>
+	<input type="text" name="" id="txtTask">
+	<input type="button" style="border:" value="Add Task" id="btnAddTask" >
+	<input type="button" value="Remove Completed" id="btnRemoveCompletedTasks">
+	<ul id="ulTaskList">
+		
+	</ul>
+	<div id="divMessage"></div>
+	
+</body>
+</html>

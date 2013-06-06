@@ -18,18 +18,13 @@
 		}
 	</style>
 	<script type="text/template" id="calculatorTemplate">
-		<div><label for="txtBasic">Basic :</label><input type="text" name="txtBasic" id="txtBasic"></div>
-		<div><label for="txtHra">Hra :</label><input type="text" name="txtHra" id="txtHra"></div>
-		<div><label for="txtDa">Da :</label><input type="text" name="txtDa" id="txtDa"></div>
-		<div><label for="txtTax">Tax :</label><input type="text" name="txtTax" id="txtTax"></div>
-		<div><input type="button" value="Calculate" id="btnCalculate"></div>
-		<div><span id="spanResult"></span></div>
+		
 	</script>
 	<script src="SalaryCalculatorModel.js"></script>
 	<script>
 	
 	(function(){
-		var calculator = new SalaryCalculator();
+		window.calculator = new SalaryCalculator();
 		
 
 		window.addEventListener("DOMContentLoaded",function(){
@@ -58,6 +53,7 @@
 		function calculateSalary(){
 			
 			calculator.calculate();
+			document.getElementById("divSalary").innerHTML = calculator.salary();
 			
 		}
 		function refreshSalary(){
@@ -68,7 +64,12 @@
 </head>
 <body>
 	<div class="container">
-		
+		<div><label for="txtBasic">Basic :</label><input type="text" name="txtBasic" id="txtBasic"></div>
+		<div><label for="txtHra">Hra :</label><input type="text" name="txtHra" id="txtHra"></div>
+		<div><label for="txtDa">Da :</label><input type="text" name="txtDa" id="txtDa"></div>
+		<div><label for="txtTax">Tax :</label><input type="text" name="txtTax" id="txtTax"></div>
+		<div><input type="button" value="Calculate" id="btnCalculate"></div>
+		<div><span id="spanResult"></span></div>
 		
 	</div>
 	<div></div>
