@@ -7,9 +7,14 @@
 	window.addEventListener("DOMContentLoaded",function(){
 		var worker = new Worker("doWorkWorker.js");
 		worker.onmessage = function(evt){
-			if (evt.data === "completed"){
+			if (evt.data.type === "completed"){
+				document.getElementById("workProgress").value = 100;
 				displayMessage("Work Completed");
 				console.timeEnd("doWork");
+			}
+			if (evt.data.type === "progress"){
+				//console.log(evt.data.percentCompleted);
+				document.getElementById("workProgress").value = evt.data.percentCompleted;
 			}
 		}
 		document.getElementById("btnStart").addEventListener("click",function(){
