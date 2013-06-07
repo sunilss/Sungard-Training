@@ -9,7 +9,7 @@ namespace ChatApp
     {
         static void Main(string[] args)
         {
-            List<IWebSocketConnection> connections = new List<IWebSocketConnection>();
+            var connections = new List<IWebSocketConnection>();
             var server = new WebSocketServer("ws://localhost:9090/ChatServer");
             server.Start(con =>
                 {
